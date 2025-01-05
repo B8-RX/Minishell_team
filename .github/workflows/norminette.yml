@@ -23,19 +23,20 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Check if Norminette is installed
+      - name: Install Norminette
         run: |
-          if ! command -v norminette &> /dev/null
-          then
-              echo "Norminette non trouvée, installation..."
-              curl -sSL https://github.com/42School/norminette/releases/download/v3.2.0/norminette-linux-x86_64 -o norminette
-              chmod +x norminette
-              mv norminette /usr/local/bin/
-          else
-              echo "Norminette déjà installée"
-          fi
+          echo "Vérification et installation de Norminette..."
+
+          # Télécharger et installer Norminette à partir de GitHub
+          curl -sSL https://github.com/42School/norminette/releases/download/v3.2.0/norminette-linux-x86_64 -o norminette
+          chmod +x norminette
+          mv norminette /usr/local/bin/
+
+          # Vérifier si Norminette est bien installée
+          norminette --version
 
       - name: Run Norminette
         run: |
-          norminette  # Remplacer "norminette" par "norminette <chemin-ou-tester> ex: src/" par le répertoire contenant ton code
+          # Remplacer "src/" par le répertoire contenant ton code
+          norminette src/  # Vérifier la norme pour le répertoire `src/`
 
