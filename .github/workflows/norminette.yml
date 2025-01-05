@@ -3,10 +3,16 @@ name: Norminette Check
 on:
   pull_request:
     branches:
-      - '*'
+      - main
+      - dev
+      - feature/parsing
+      - feature/execution-*
   push:
     branches:
-      - '*'
+      - main
+      - dev
+      - feature/parsing
+      - feature/execution-*
 
 jobs:
   norminette:
