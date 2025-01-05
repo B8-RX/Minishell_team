@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Rendre le hook exécutable (au cas où)
+if [ ! -x ".git/hooks/pre-push" ]; then
+    echo "Rendre le hook pre-push exécutable..."
+	chmod +x .githooks/pre-push
+fi
+
+# Obtenir le nom de la branche actuelle
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+# Vérifier si la branche suit le pattern `feature/*`
+if [[ ! "$branch_name" =~ ^feature/ ]]; then
+    echo "La branche '$branch_name' n'est pas une branche 'feature/*'."
+    echo "Le hook pre-push ne s'exécute pas pour cette branche."
+    exit 0
+fi
+
+# Dossier à vérifier
+DIRECTORY="src/"  # Remplace par le chemin de ton code
+
+# Vérifier si Python est installé
+if ! command -v python3 &> /dev/null; then
+    echo "Erreur : Python 3 n'est pas installé. Installe-le pour pouvoir exécuter Norminette."
+    exit 1
+fi
+
+# Vérifier si pip est installé
+if ! command -v pip3 &> /dev/null; then
+    echo "Erreur : pip n'est pas installé. Installe-le pour pouvoir gérer les packages Python."
+    exit 1
+fi
+
+# Vérifier si Norminette est installée
+if ! command -v norminette &> /dev/null; then
+    echo "Norminette n'est pas installée. Installation en cours..."
+    python3 -m pip install --user norminette
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Impossible d'installer Norminette. Vérifiez votre installation de Python et pip."
+        exit 1
+    fi
+    echo "Norminette installée avec succès."
+fi
+
+# Vérification de la norme avec Norminette
+echo "Vérification de la norme avec Norminette sur la branche '$branch_name'..."
+norminette $DIRECTORY
+
+# Vérifier le code de sortie de Norminette
+if [ $? -ne 0 ]; then
+    echo "Erreur : Le code ne respecte pas la norme. Corrige les erreurs avant de pousser."
+    exit 1
+fi
+
+echo "Norme respectée. Push autorisé."
+exit 0
