@@ -29,6 +29,6 @@ jobs:
 
       - name: Run Norminette
         run: |
-          # Remplacer "src/" par le répertoire contenant ton code
-          norminette src/  # Vérifier la norme pour le répertoire `src/`
+          # Remplacer norminette par norminette suivi du chemin ou tester
+          norminette  # Vérifier la norme pour le répertoire `racine`
 
