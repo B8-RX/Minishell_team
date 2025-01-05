@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Dossier à vérifier
-DIRECTORY="src/"  # Remplace par le chemin de ton code
+DIRECTORY="."  # Remplace par le chemin de ton code
 
 # Chemin de l'environnement virtuel
 VENV_PATH="$HOME/.venv_norminette"
 
 # Rendre le hook exécutable (au cas où)
 if [ ! -x ".git/hooks/pre-push" ]; then
-    chmod +x .git/hooks/pre-push
+    chmod +x .githooks/pre-push
 fi
 
 # Vérifier si Python est installé
