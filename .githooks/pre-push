@@ -5,6 +5,17 @@ if [ ! -x ".githooks/pre-push" ]; then
     chmod +x .githooks/pre-push
 fi
 
+# Obtenir le nom de la branche actuelle
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+# Pattern des branches à vérifier
+pattern="^(feature|bugfix|hotfix|chore)/[a-z0-9_-]+$"
+
+# On quitte si la branch ne match le pas le pattern
+if [[ ! "$branch_name" =~ $pattern ]]; then
+    exit 0
+fi
+
 # Dossier à vérifier
 DIRECTORY="."  # Remplace par le chemin de ton code
 
