@@ -6,6 +6,7 @@ branch_name=$(git symbolic-ref --short HEAD)
 # Définir le pattern de nommage de la branche
 pattern="^(feature|bugfix|hotfix|chore)/[a-z0-9_-]+$"
 
+# Vérifier si la branche correspond au pattern
 if [[ "$branch_name" != "dev" && "$branch_name" != "main" && ! "$branch_name" =~ $pattern ]]; then
     echo "Nom de branche invalide : $branch_name"
     echo "Le nom de la branche doit suivre ce format : <type>/<nom-de-la-branche>"
@@ -19,8 +20,11 @@ if [[ "$branch_name" != "dev" && "$branch_name" != "main" && ! "$branch_name" =~
         git branch -m "$new_branch_name"
         echo "La branche a été renommée en : $new_branch_name"
     else
-        echo "La branche n'a pas été renommée. Veuillez la renommer manuellement.(git branch -m <new-branch-name>)"
+        echo "La branche n'a pas été renommée. Veuillez la renommer manuellement. (git branch -m <new-branch-name>)"
     fi
     exit 1
 fi
+
+# Si la branche est valide, continuer
+echo "La branche '$branch_name' est valide."
 
