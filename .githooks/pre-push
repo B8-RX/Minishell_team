@@ -1,15 +1,23 @@
 #!/bin/bash
 
-# Dossier à vérifier
-DIRECTORY="."  # Remplace par le chemin de ton code
-
-# Chemin de l'environnement virtuel
-VENV_PATH="$HOME/.venv_norminette"
-
 # Rendre le hook exécutable (au cas où)
 if [ ! -x ".git/hooks/pre-push" ]; then
     chmod +x .githooks/pre-push
 fi
+
+# Dossier à vérifier
+DIRECTORY="."  # Remplace par le chemin de ton code
+
+# Chemin vers le plugin vim stdheader
+PLUGIN_PATH="$HOME/.vim/plugin"
+PLUGIN_FILE="stdheader.vim"
+
+# Chemin vers le fichier vimrc
+VIMRC_PATH="$HOME/.vimrc"
+
+# Login de l'utilisateur pour le header 42
+USER42="yourLogin"
+MAIL42="${USER42}@student.42.fr"
 
 # Vérifier si Python est installé
 if ! command -v python3 &> /dev/null; then
@@ -17,43 +25,61 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Vérifier si l'environnement virtuel existe, sinon le créer
-if [ ! -d "$VENV_PATH" ]; then
-    echo "Création de l'environnement virtuel pour Norminette..."
-    python3 -m venv $VENV_PATH
-    if [ $? -ne 0 ]; then
-        echo "Erreur : Impossible de créer l'environnement virtuel."
-        exit 1
-    fi
-fi
-
-# Activer l'environnement virtuel
-source $VENV_PATH/bin/activate
-
-# Vérifier si Norminette est installée, sinon l'installer
+# Vérifier si Norminette est installée
 if ! command -v norminette &> /dev/null; then
     echo "Norminette n'est pas installée. Installation en cours..."
-    pip install --upgrade pip setuptools
-    pip install norminette
+    python3 -m pip install --user norminette
     if [ $? -ne 0 ]; then
-        echo "Erreur : Impossible d'installer Norminette dans l'environnement virtuel."
-        deactivate
+        echo "Erreur : Impossible d'installer Norminette."
         exit 1
     fi
 fi
 
-# Exécuter Norminette
+# Vérification de la norme avec Norminette
 echo "Vérification de la norme avec Norminette..."
-norminette $DIRECTORY
+OUTPUT=$(norminette $DIRECTORY)
 
-if [ $? -ne 0 ]; then
-    echo "Erreur : Le code ne respecte pas la norme."
-    deactivate
-    exit 1
+# Vérifier si une erreur d'en-tête est détectée
+if echo "$OUTPUT" | grep -q "Error: INVALID_HEADER"; then
+    echo "Erreur : Header 42 manquant ou invalide. Ajout du header..."
+
+    # Créer le dossier .vim/plugin si nécessaire
+    if [ ! -d "$PLUGIN_PATH" ]; then
+        mkdir -p "$PLUGIN_PATH"
+        echo "Création du dossier $PLUGIN_PATH"
+    fi
+
+    # Ajouter le fichier stdheader.vim au plugin
+    cp "$(dirname "$0")/stdheader.vim" "$PLUGIN_PATH/$PLUGIN_FILE"
+    echo "Plugin stdheader ajouté à $PLUGIN_PATH"
+
+    # Ajouter les variables dans .vimrc
+    if [ ! -f "$VIMRC_PATH" ]; then
+        echo "Création du fichier $VIMRC_PATH"
+        touch "$VIMRC_PATH"
+    fi
+
+    if ! grep -q "let g:user42" "$VIMRC_PATH"; then
+        echo "Ajout des variables g:user42 et g:mail42 dans $VIMRC_PATH"
+        echo "let g:user42 = '$USER42'" >> "$VIMRC_PATH"
+        echo "let g:mail42 = '$MAIL42'" >> "$VIMRC_PATH"
+    fi
+
+    echo "Header ajouté avec succès. Relance de la vérification Norminette..."
+    OUTPUT=$(norminette $DIRECTORY)
+
+    if echo "$OUTPUT" | grep -q "Error: INVALID_HEADER"; then
+        echo "Erreur : Impossible de corriger automatiquement le header."
+        exit 1
+    fi
 fi
 
-# Désactiver l'environnement virtuel
-deactivate
+# Vérifier si la norme est respectée après correction
+if echo "$OUTPUT" | grep -q "Error"; then
+    echo "Erreur : Le code ne respecte pas la norme."
+    echo "$OUTPUT"
+    exit 1
+fi
 
 echo "Norme respectée. Push autorisé."
 exit 0
