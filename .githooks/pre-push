@@ -2,7 +2,6 @@
 
 # Rendre le hook exécutable (au cas où)
 if [ ! -x ".git/hooks/pre-push" ]; then
-    echo "Rendre le hook pre-push exécutable..."
 	chmod +x .githooks/pre-push
 fi
 
@@ -11,8 +10,6 @@ branch_name=$(git rev-parse --abbrev-ref HEAD)
 
 # Vérifier si la branche suit le pattern `feature/*`
 if [[ ! "$branch_name" =~ ^feature/ ]]; then
-    echo "La branche '$branch_name' n'est pas une branche 'feature/*'."
-    echo "Le hook pre-push ne s'exécute pas pour cette branche."
     exit 0
 fi
 
