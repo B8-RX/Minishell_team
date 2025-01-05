@@ -29,6 +29,6 @@ jobs:
 
       - name: Run Norminette
         run: |
-          # Remplacer norminette par norminette suivi du chemin ou tester
+          # Remplacer 'norminette' par 'norminette + chemin' suivi du chemin ou tester
           norminette  # Vérifier la norme pour le répertoire `racine`
 
