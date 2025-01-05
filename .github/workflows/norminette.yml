@@ -23,17 +23,11 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Norminette
+      - name: Install Norminette via pip
         run: |
-          echo "Vérification et installation de Norminette..."
-
-          # Télécharger et installer Norminette à partir de GitHub
-          curl -sSL https://github.com/42School/norminette/releases/download/v3.2.0/norminette-linux-x86_64 -o norminette
-          chmod +x norminette
-          mv norminette /usr/local/bin/
-
-          # Vérifier si Norminette est bien installée
-          norminette --version
+          echo "Installation de Norminette avec pip..."
+          python -m pip install --upgrade pip
+          pip install norminette
 
       - name: Run Norminette
         run: |
