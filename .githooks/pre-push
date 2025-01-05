@@ -8,6 +8,9 @@ fi
 # Dossier à vérifier
 DIRECTORY="."  # Remplace par le chemin de ton code
 
+# Chemin de l'environnement virtuel
+VENV_PATH="$HOME/.venv_norminette"
+
 # Chemin vers le plugin vim stdheader
 PLUGIN_PATH="$HOME/.vim/plugin"
 PLUGIN_FILE="stdheader.vim"
