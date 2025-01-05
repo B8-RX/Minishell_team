@@ -25,16 +25,6 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Vérifier si Norminette est installée
-if ! command -v norminette &> /dev/null; then
-    echo "Norminette n'est pas installée. Installation en cours..."
-    python3 -m pip install --user norminette
-    if [ $? -ne 0 ]; then
-        echo "Erreur : Impossible d'installer Norminette."
-        exit 1
-    fi
-fi
-
 # Vérifier si l'environnement virtuel existe, sinon le créer
 if [ ! -d "$VENV_PATH" ]; then
     echo "Création de l'environnement virtuel pour Norminette..."
@@ -56,6 +46,16 @@ if ! command -v norminette &> /dev/null; then
     if [ $? -ne 0 ]; then
         echo "Erreur : Impossible d'installer Norminette dans l'environnement virtuel."
         deactivate
+        exit 1
+    fi
+fi
+
+# Vérifier si Norminette est installée
+if ! command -v norminette &> /dev/null; then
+    echo "Norminette n'est pas installée. Installation en cours..."
+    python3 -m pip install --user norminette
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Impossible d'installer Norminette."
         exit 1
     fi
 fi
