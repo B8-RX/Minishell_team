@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Obtenir le nom de la branche actuelle
+branch_name=$(git symbolic-ref --short HEAD)
+
+# Définir le pattern de nommage de la branche
+pattern="^(feature|bugfix|hotfix|chore)/[a-z0-9_-]+$"
+
+if [[ "$branch_name" != "dev" && "$branch_name" != "main" && ! "$branch_name" =~ $pattern ]]; then
+    echo "Nom de branche invalide : $branch_name"
+    echo "Le nom de la branche doit suivre ce format : <type>/<nom-de-la-branche>"
+    echo "Exemple : feature/parsing, bugfix/fix-execution"
+    
+    # Demander à l'utilisateur s'il souhaite renommer la branche
+    read -p "Souhaitez-vous renommer la branche ? (o/n) " choice
+    if [[ "$choice" == "o" || "$choice" == "O" ]]; then
+        # Demander le nouveau nom de la branche
+        read -p "Entrez le nouveau nom de la branche : " new_branch_name
+        git branch -m "$new_branch_name"
+        echo "La branche a été renommée en : $new_branch_name"
+    else
+        echo "La branche n'a pas été renommée. Veuillez la renommer manuellement.(git branch -m <new-branch-name>)"
+    fi
+    exit 1
+fi
+
