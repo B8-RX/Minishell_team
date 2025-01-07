@@ -26,7 +26,8 @@
 // Permission refusée
 
 // Enumération pour les types de redirection
-typedef enum e_redirection_type {
+typedef enum e_redirection_type
+{
 	REDIR_NONE,
 	REDIR_INPUT,
 	REDIR_OUTPUT,
@@ -44,7 +45,8 @@ typedef enum e_redirection_type {
 */
 
 // Structure pour les redirections
-typedef struct s_redirection {
+typedef struct s_redirection
+{
 	t_redirection_type		type;
 	char					*file;
 	struct s_redirection	*next;
@@ -61,7 +63,8 @@ typedef struct s_redirection {
 */
 
 // Enumération pour les types de connexions
-typedef enum e_pipe_type {
+typedef enum e_pipe_type
+{
 	PIPE_NONE,
 	PIPE_SINGLE,
 	PIPE_END
@@ -72,13 +75,14 @@ typedef enum e_pipe_type {
     PIPE_SINGLE,    // Commande connectée à un pipe (|), mais pas
 					// à la fin d'une chaîne. Exemple : 
 					// Dans ls | grep txt, la commande ls aura PIPE_SINGLE.
-    PIPE_END        // Dernière commande d'une chaîne de pipes (|)
-					// Exemple : Dans ls | grep txt, la commande grep aura PIPE_END. 
+    PIPE_END        // Dernière commande d'une chaîne de pipes (|) Exemple :
+					// Dans ls | grep txt, la commande grep aura PIPE_END. 
 } t_pipe_type;
 */
 
 // Structure principale pour une commande
-typedef struct s_command {
+typedef struct s_command
+{
 	char				*cmd_name;
 	char				**args;
 	t_redirection		*redirections;
@@ -102,7 +106,8 @@ typedef struct s_command {
 
 // Structure globale pour Minishell, que le parsing doit 
 // remplir et que l'exécution doit utiliser
-typedef struct s_minishell {
+typedef struct s_minishell
+{
 	char		**env;
 	int			exit_status;
 	t_command	*commands;
