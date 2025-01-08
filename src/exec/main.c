@@ -14,7 +14,7 @@
 
 int	main(void)
 {
-	char *line;
+	char	*line;
 
 	line = malloc(sizeof(5) + 1);
 	line = "Hello";
