@@ -86,7 +86,7 @@ char	*ft_append_char_to_str(char *str, char c, int position)
 		while (str[++i])
 			new[i + 1] = str[i];
 		new[i + 1] = '\0';
-	}	
+	}
 	else
 	{
 		while (str[++i])

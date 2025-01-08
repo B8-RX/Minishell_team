@@ -11,7 +11,7 @@ branch_name=$(git rev-parse --abbrev-ref HEAD)
 # Pattern des branches à vérifier
 pattern="^(feature|bugfix|hotfix|chore)/[a-z0-9_-]+$"
 
-# On quitte si la branch ne match le pas le pattern
+# On quitte si la branche ne match pas le pattern
 if [[ ! "$branch_name" =~ $pattern ]]; then
     exit 0
 fi
@@ -53,16 +53,6 @@ if ! command -v norminette &> /dev/null; then
     fi
 fi
 
-# Vérifier si Norminette est installée
-if ! command -v norminette &> /dev/null; then
-    echo "Norminette n'est pas installée. Installation en cours..."
-    python3 -m pip install --user norminette
-    if [ $? -ne 0 ]; then
-        echo "Erreur : Impossible d'installer Norminette."
-        exit 1
-    fi
-fi
-
 # Vérification de la norme avec Norminette
 echo "Vérification de la norme avec Norminette..."
 OUTPUT=$(norminette $DIRECTORY)
@@ -74,5 +64,36 @@ if echo "$OUTPUT" | grep -q "Error"; then
     exit 1
 fi
 
-echo "Norme respectée. Push autorisé."
+echo "Norme respectée."
+
+# Test Valgrind uniquement sur certaines branches spécifiques
+valgrind_branches="^(dev|feature/parsing|feature/execution-setup|feature/built.*)$"
+if [[ "$branch_name" =~ $valgrind_branches ]]; then
+    echo "Exécution des tests Valgrind..."
+
+    # Recompilation propre
+    make re
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Échec de la compilation."
+        make fclean
+        [ -f ./minishell ] && rm -f ./minishell
+        exit 1
+    fi
+
+    # Exécution des tests avec Valgrind
+    valgrind --leak-check=full ./minishell
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Tests Valgrind échoués."
+        make fclean
+        [ -f ./minishell ] && rm -f ./minishell
+        exit 1
+    fi
+
+    # Nettoyage des fichiers générés
+    make fclean
+    [ -f ./minishell ] && rm -f ./minishell
+    echo "Tests Valgrind réussis."
+fi
+
+echo "Push autorisé."
 exit 0
