@@ -67,7 +67,7 @@ fi
 echo "Norme respectée."
 
 # Test Valgrind uniquement sur certaines branches spécifiques
-valgrind_branches="^(dev|feature/parsing|feature/execution-setup|feature/built.*)$"
+valgrind_branches="^(dev|main|feature/parsing|feature/execution-setup|feature/built.*)$"
 if [[ "$branch_name" =~ $valgrind_branches ]]; then
     echo "Exécution des tests Valgrind..."
 
