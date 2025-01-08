@@ -14,6 +14,6 @@
 
 int main(void)
 {
-    printf("Hello, ceci est un main temporaire! Le main.c final est en construction...\n");
+    printf("Hello, ceci est un main temporaire! Main.c final est en construction...\n");
     return 0;
 }
