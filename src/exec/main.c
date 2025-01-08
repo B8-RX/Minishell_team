@@ -21,5 +21,6 @@ int	main(void)
 	line[5] = '\0';
 	printf("Hello, ceci est un main temporaire!"
 		"Le main.c final est en construction...\n");
+	free(line);
 	return (0);
 }
