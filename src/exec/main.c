@@ -16,10 +16,16 @@ int	main(void)
 {
 	char	*line;
 
-	line = malloc(sizeof(5) + 1);
+	line = malloc(5 * sizeof(char) + 1);
+	if (!line)
+	{
+		fprintf(stderr, "Erreur : Échec de l'allocation mémoire.\n");
+		return (1);
+	}
 	ft_strlcpy(line, "Hello", 6);
 	free(line);
-	printf("Hello, ceci est un main temporaire!"
-		"Le main.c final est en construction...\n");
+	printf("Hello, ceci est un main temporaire!\n");
+	printf("Pour tester la compilation et les hooks pre-push.\n");
+	printf("Le main.c final est en construction...\n");
 	return (0);
 }
