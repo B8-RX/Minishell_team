@@ -24,8 +24,9 @@ int	main(void)
 	}
 	ft_strlcpy(line, "Hello", 6);
 	free(line);
-	printf("Hello, ceci est un main temporaire!\n");
+	printf("\e[0;33mHello, ceci est un main temporaire!\n");
 	printf("Pour tester la compilation et les hooks pre-push.\n");
 	printf("Le main.c final est en construction...\n");
+	printf("\e[0m");
 	return (0);
 }
