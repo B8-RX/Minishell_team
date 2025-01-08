@@ -14,6 +14,50 @@ fi
 
 echo -e "\033[34mLa branche correspond au pattern. Vérification de la norme...\033[0m"
 
+# Chemin de l'environnement virtuel
+VENV_PATH="$HOME/.venv_norminette"
+
+# Vérifier si Python est installé
+if ! command -v python3 &> /dev/null; then
+    echo "Erreur : Python 3 n'est pas installé."
+    exit 1
+fi
+
+# Vérifier si l'environnement virtuel existe, sinon le créer
+if [ ! -d "$VENV_PATH" ]; then
+    echo "Création de l'environnement virtuel pour Norminette..."
+    python3 -m venv $VENV_PATH
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Impossible de créer l'environnement virtuel."
+        exit 1
+    fi
+fi
+
+# Activer l'environnement virtuel
+source $VENV_PATH/bin/activate
+
+# Vérifier si Norminette est installée, sinon l'installer
+if ! command -v norminette &> /dev/null; then
+    echo "Norminette n'est pas installée. Installation en cours..."
+    pip install --upgrade pip setuptools
+    pip install norminette
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Impossible d'installer Norminette dans l'environnement virtuel."
+        deactivate
+        exit 1
+    fi
+fi
+
+# Vérifier si Norminette est installée
+if ! command -v norminette &> /dev/null; then
+    echo "Norminette n'est pas installée. Installation en cours..."
+    python3 -m pip install --user norminette
+    if [ $? -ne 0 ]; then
+        echo "Erreur : Impossible d'installer Norminette."
+        exit 1
+    fi
+fi
+
 # Vérification de la norme avec Norminette
 DIRECTORY="./src ./libft"
 OUTPUT=$(norminette $DIRECTORY)
@@ -26,6 +70,16 @@ if echo "$OUTPUT" | grep -q "Error"; then
 fi
 
 echo -e "\033[32mNorme respectée.\033[0m"
+
+# Vérifier si Valgrind est installé
+if ! command -v valgrind &> /dev/null; then
+    echo -e "\033[31mAttention : Valgrind n'est pas installé.\033[0m"
+    echo -e "\033[33mLes tests mémoire n'ont pas été effectués. Pour installer Valgrind :\033[0m"
+    echo -e "\033[36m  sudo apt install valgrind   # Pour les systèmes basés sur Debian/Ubuntu\033[0m"
+    echo -e "\033[36m  sudo yum install valgrind   # Pour les systèmes basés sur Red Hat\033[0m"
+    echo -e "\033[36m  brew install valgrind       # Pour macOS avec Homebrew\033[0m"
+    exit 0
+fi
 
 # Test Valgrind uniquement sur certaines branches spécifiques
 valgrind_branches="^(dev|main|feature/parsing|feature/execution-setup|feature/built.*)$"
