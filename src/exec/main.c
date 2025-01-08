@@ -19,8 +19,8 @@ int	main(void)
 	line = malloc(sizeof(5) + 1);
 	line = "Hello";
 	line[5] = '\0';
+	free(line);
 	printf("Hello, ceci est un main temporaire!"
 		"Le main.c final est en construction...\n");
-	free(line);
 	return (0);
 }
