@@ -8,11 +8,11 @@ echo "Nom de la branche : $branch_name"
 pattern="^(dev|main|feature/parsing|feature/execution-setup|feature/built.*)$"
 
 if [[ ! "$branch_name" =~ $pattern ]]; then
-    echo "La branche $branch_name ne correspond pas au pattern. Push autorisé."
+	echo -e "\033[34mLa branche $branch_name ne correspond pas au pattern. Push autorisé.\033[0m"
     exit 0
 fi
 
-echo "La branche correspond au pattern. Vérification de la norme..."
+echo -e "\033[34mLa branche correspond au pattern. Vérification de la norme...\033[0m"
 
 # Vérification de la norme avec Norminette
 DIRECTORY="./src ./libft"
@@ -21,11 +21,11 @@ echo "Résultat Norminette :"
 echo "$OUTPUT"
 
 if echo "$OUTPUT" | grep -q "Error"; then
-    echo "Erreur : Le code ne respecte pas la norme."
+	echo -e "\033[31mErreur : Le code ne respecte pas la norme.\033[0m" # Rouge pour les erreurs
     exit 1
 fi
 
-echo "Norme respectée."
+echo -e "\033[32mNorme respectée.\033[0m"
 
 # Test Valgrind uniquement sur certaines branches spécifiques
 valgrind_branches="^(dev|main|feature/parsing|feature/execution-setup|feature/built.*)$"
@@ -33,20 +33,20 @@ if [[ "$branch_name" =~ $valgrind_branches ]]; then
     echo "Exécution des tests Valgrind..."
     make re
     if [ $? -ne 0 ]; then
-        echo "Erreur : Échec de la compilation."
+		echo -e "\033[31mErreur : Échec de la compilation.\033[0m" # Rouge pour les erreurs
         make fclean
         exit 1
     fi
 
     valgrind --leak-check=full ./minishell
     if [ $? -ne 0 ]; then
-        echo "Erreur : Tests Valgrind échoués."
+        echo -e "\033[31mErreur : Tests Valgrind échoués.\033[0m" # Rouge pour les erreurs
         make fclean
         exit 1
     fi
 
     make fclean
-    echo "Tests Valgrind réussis."
+	echo -e "\033[32mTests Valgrind réussis.\033[0m" # Vert pour les succès
 fi
 
 echo "Push autorisé."
