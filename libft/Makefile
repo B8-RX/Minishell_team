@@ -28,7 +28,7 @@ ${OBJS_PATH}%.o : %.c
 
 ${NAME} : ${OBJS}
 	ar -rsc ${NAME} ${OBJS}
-	echo "\033[1mLIBFT COMPILATION COMPLETE\033[0m"
+	@echo "\033[1mCompilation de LIBFT terminée !\033[0m"
 
 clean :
 	rm -f ${OBJS}
@@ -42,3 +42,5 @@ re : fclean all
 bonus : all
 
 .PHONY : all clean fclean re bonus
+
+.SILENT : 
