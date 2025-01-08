@@ -12,8 +12,9 @@
 
 #include "../../includes/minishell.h"
 
-int main(void)
+int	main(void)
 {
-    printf("Hello, ceci est un main temporaire! Le main.c final est en construction...\n");
-    return 0;
+	printf("Hello, ceci est un main temporaire!"
+		"Le main.c final est en construction...\n");
+	return (0);
 }
