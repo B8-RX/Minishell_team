@@ -66,18 +66,25 @@ typedef struct s_redirection
 typedef enum e_pipe_type
 {
 	PIPE_NONE,
-	PIPE_SINGLE,
+	PIPE_START,
+	PIPE_MIDDLE,
 	PIPE_END
 }	t_pipe_type;
+
 /*
- * typedef enum e_pipe_type {
-    PIPE_NONE,      // Pas de pipe
-    PIPE_SINGLE,    // Commande connectée à un pipe (|), mais pas
-					// à la fin d'une chaîne. Exemple : 
-					// Dans ls | grep txt, la commande ls aura PIPE_SINGLE.
-    PIPE_END        // Dernière commande d'une chaîne de pipes (|) Exemple :
-					// Dans ls | grep txt, la commande grep aura PIPE_END. 
-} t_pipe_type;
+Aucune commande avec pipe :
+Si aucune commande dans la ligne n’a de pipe (|) => PIPE_NONE.
+
+Une seule commande avec un pipe (|) :
+
+    La première commande → PIPE_START.
+    La dernière commande → PIPE_END.
+
+Plusieurs commandes dans une chaîne de pipes :
+
+    La première commande → PIPE_START.
+    Les commandes intermédiaires → PIPE_MIDDLE.
+    La dernière commande → PIPE_END
 */
 
 // Structure principale pour une commande

@@ -27,7 +27,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 		else
 			new_content = ft_lstnew(lst -> content);
 		if (!new_content)
-		{	
+		{
 			ft_lstclear(&new_list, del);
 			return (NULL);
 		}

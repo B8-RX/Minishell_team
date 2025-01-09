@@ -41,7 +41,7 @@ t_printf	*ft_format_processing(t_printf **printf_props, const char *format)
 }
 
 t_printf	*ft_handle_flags(t_printf *printf_props, const char *format)
-{	
+{
 	int	i;
 
 	i = 0;
