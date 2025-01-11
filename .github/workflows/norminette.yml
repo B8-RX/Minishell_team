@@ -1,0 +1,36 @@
+name: Norminette Check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  norminette:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Norminette via pip
+        run: |
+          echo "Installation de Norminette avec pip..."
+          python -m pip install --upgrade pip
+          pip install norminette
+
+      - name: Run Norminette
+        run: |
+          # Remplacer 'norminette' par 'norminette + chemin' suivi du chemin ou tester
+          norminette  # Vérifier la norme pour le répertoire `racine`
+

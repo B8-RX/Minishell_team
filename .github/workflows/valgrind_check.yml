@@ -1,0 +1,36 @@
+name: Valgrind Memory Check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  valgrind:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y valgrind
+
+      - name: Build project
+        run: |
+          make
+
+      - name: Run Valgrind on minishell
+        run: |
+          valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-report.txt ./minishell
+          
+      - name: Display Valgrind report
+        run: |
+          cat valgrind-report.txt
