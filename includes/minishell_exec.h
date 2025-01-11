@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <signal.h>
+# include <termios.h>
 
 // Constantes pour les codes de retour des commandes
 # define CMD_NOT_FOUND 127
