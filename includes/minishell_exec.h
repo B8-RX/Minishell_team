@@ -59,9 +59,8 @@ typedef enum e_pipe_type
 // Enumération pour les types de commandes
 typedef enum e_cmd_type
 {
-	CMD_ABSOLUTE,
-	CMD_RELATIVE,
-	CMD_PATH
+	CMD_EXTERNAL,
+	CMD_BUILTIN
 }	t_cmd_type;
 
 // Structure principale pour une commande
@@ -123,12 +122,10 @@ void		handle_signals(void);
 // }   t_redirection;
 //
 // // Enumération pour les types de commandes
-// typedef enum e_cmd_type
-// {
-//     CMD_ABSOLUTE,      // Chemin absolu
-//     CMD_RELATIVE,      // Chemin relatif
-//     CMD_PATH           // Résolution via $PATH
-// }   t_cmd_type;
+// typedef enum e_cmd_type {
+//     CMD_EXTERNAL, // Commandes externes à exécuter avec execve
+//     CMD_BUILTIN   // Commandes internes comme cd, echo, etc.
+// } t_cmd_type;
 //
 // // Structure principale pour une commande
 // typedef struct s_command
@@ -166,7 +163,7 @@ void		handle_signals(void);
 //     .resolved_path = "/bin/ls",           // Chemin vers l'exécutable
 //     .exit_status = 0,                     // Code de sortie
 //     .is_builtin = false,                  // Ce n'est pas un builtin
-//     .cmd_type = CMD_PATH,                 // Trouvé dans le PATH
+//     .cmd_type = CMD_EXTERNAL              // Trouvé dans le PATH
 //     .next = NULL                          // Pas de commande suivante
 // };
 //
@@ -182,5 +179,5 @@ void		handle_signals(void);
 //     resolved_path : Le chemin complet de la commande 
 //			 (ça peut venir du parsing $PATH).
 //     is_builtin : Ce n'est pas une commande interne, donc false.
-//     cmd_type : Comme ls vient du $PATH, on met CMD_PATH.
+//     cmd_type : Comme ls vient du $PATH, on met CMD_EXTERNAL.
 //     next : Pas d'autres commandes enchaînées ici, donc NULL.
